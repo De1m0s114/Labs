@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-
+                                                              Перегрузка в конце!!!
 class arr {
 public:
 	int num;
