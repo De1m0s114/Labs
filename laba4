@@ -1,0 +1,226 @@
+#include <iostream>
+using namespace std;
+
+class arr {
+public:
+	int num;
+};
+class mas :arr {
+public:
+	mas();
+	mas(int);
+	mas(const mas& k);
+	~mas();
+	int size;
+	arr* first;
+	void swap(int place, int palce1);
+	void add(int place, int value);
+	void print();
+	mas & operator = (const mas& k);
+	mas operator + (const mas& a);
+	mas operator - (const mas& a);
+	mas operator * (const mas& a);
+	int& operator [] (int i);
+	friend ostream& operator <<(ostream& p, mas& k);
+	friend istream& operator >>(istream& p, mas& k);
+
+
+
+
+};
+int main()
+{
+	int place1, place;
+	int size,size2;
+	std::cin >> size >> size2;
+	std::cin >> place >> place1;
+	mas masiv(size);
+	mas masiv2(size2);
+	
+	for (int i = 0; i < size; i++) {
+		masiv.add(i, i+1);
+	}
+	for (int i = 0; i < size2; i++) {
+		masiv2.add(i, i + 10);
+	}
+	//mas masiv3 = (masiv + masiv2);
+	masiv.print();
+	std::cout << std::endl;
+	masiv.swap( place, place1);
+	masiv.print();
+	cout << endl;
+	masiv2.print();
+	cout << endl;
+	//masiv3.print();
+	masiv = masiv2;
+	masiv.print();
+	cout << endl;
+	masiv.~mas();
+	masiv2.~mas();
+	//masiv3.~mas();
+	
+
+	return 0;
+}
+mas::mas() {
+	size = 0;
+	arr* temp = new arr;
+	first = temp;
+}
+mas::mas(int s) {
+	size = s;
+	arr* temp = new arr[size];
+	first = temp;
+}
+mas::mas(const mas& k) {
+	size = k.size;
+	first = k.first;
+}
+mas::~mas() {
+	delete[] first;
+	first = nullptr;
+}
+	void mas::print() {
+	arr* temp = first;
+	while (temp < first + size) {
+		std::cout << temp->num << " ";
+		++temp;
+	}
+			
+	}
+	void mas::add(int place, int value) {
+		if (place < size) {
+			arr* temp = first + place;
+			temp->num = value;
+		}
+	}
+
+void mas::swap(int place, int place1) {
+	int a = (first + place-1)->num;
+	(first + place-1)->num = (first + place1-1)->num;
+	(first + place1-1)->num = a;
+}
+int& mas::operator [] (int i){
+	return (first + i)->num;
+}
+mas& mas:: operator =(const mas& k){
+	this->size = k.size;
+	if (this->first!= nullptr) {
+		delete[]this->first;
+	}
+
+	 
+	this->first = new arr[k.size];
+	for (int i=0; i < k. size; i++) {
+		this->first[i] = k.first[i];
+	}
+	return  *this;
+
+}
+mas mas:: operator + (const mas& a){
+	
+	if (this->size == a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; ++i) {
+			V[i]=(*this)[i]+(a.first+i)->num;
+		}
+	return V;
+	}
+	else if (this->size > a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; i++) {
+			V[i] = (*this)[i] + (a.first + i)->num;
+		}
+		for (int i = a.size; i <( this->size); i++) {
+			V[i] = (*this)[i] ;
+		}
+		return V;
+	}
+	else {
+		mas V(a.size);
+		for (int i = 0; i < this->size; i++) {
+			V[i] = (*this)[i] + (a.first + i)->num;
+		}
+		for (int i = this->size; i < a.size; i++) {
+			V[i] = (a.first+i)->num;
+		}
+		return V;
+	}
+	
+}
+mas mas:: operator - (const mas& a) {
+
+	if (this->size == a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; i++) {
+			V[i] = (*this)[i] - (a.first + i)->num;
+		}
+		return V;
+	}
+	else if (this->size > a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; i++) {
+			V[i] = (*this)[i] -(a.first + i)->num;
+		}
+		for (int i = a.size; i < (this->size); i++) {
+			V[i] = (*this)[i];
+		}
+		return V;
+	}
+	else {
+		mas V(a.size);
+		for (int i = 0; i < this->size; i++) {
+			V[i] = (*this)[i] - (a.first + i)->num;
+		}
+		for (int i = this->size; i < a.size; i++) {
+			V[i] = (a.first + i)->num;
+		}
+		return V;
+	}
+
+}
+mas mas:: operator * (const mas& a) {
+
+	if (this->size == a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; i++) {
+			V[i] = (*this)[i] + (a.first + i)->num;
+		}
+		return V;
+	}
+	else if (this->size > a.size) {
+		mas V(this->size);
+		for (int i = 0; i < a.size; i++) {
+			V[i] = (*this)[i] * (a.first + i)->num;
+		}
+		for (int i = a.size; i < (this->size); i++) {
+			V[i] = (*this)[i];
+		}
+		return V;
+	}
+	else {
+		mas V(a.size);
+		for (int i = 0; i < this->size; i++) {
+			V[i] = (*this)[i] * (a.first + i)->num;
+		}
+		for (int i = this->size; i < a.size; i++) {
+			V[i] = (a.first + i)->num;
+		}
+		return V;
+	}
+
+}
+ostream& operator >>(ostream& p, const mas&k) {
+	p << "[";
+	for (int i = 0;i<k.size; i++) {
+		p << (k.first + i)->num;
+	}
+	p << "]";
+	return p;
+ }
+istream& operator <<(istream& p,  mas& k) {
+	for (int i = 0; i < k.size; i++) {
+		p >> k[i];
+	}
+	return p;
+}
